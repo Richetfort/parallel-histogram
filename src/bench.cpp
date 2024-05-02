@@ -4,6 +4,8 @@
 
 int main(int argc, char **argv){
 
+	//Benchmark of the two data structures implemented : Contiguous bins with parallel filling vs Splited bins with parallel filling
+	
 	int nbins = 10, n_random = 10000000;
 	double min = -4.0, max = 4.0;
 
@@ -18,18 +20,20 @@ int main(int argc, char **argv){
 
 	seq_hist->fillHist(n_random);
 	
-	ref_elapsed_time = ElapsedTime(start);
+	ref_elapsed_time = ElapsedTime(start); //Time reference
 	
-	std::cout << "Sequential filling elapsed time = " << ref_elapsed_time << "\n" << std::endl;
+	std::cout << "Contigous bins with sequential filling elapsed time = " << ref_elapsed_time << "\n" << std::endl;
 
 	delete seq_hist;
 
-	int list_num_threads[4] = {2,4,8,16};
-	double seq_elapsed_time[4];
-	double par_elapsed_time[4];
-	int num_runs = 10;
+	int list_num_threads[5] = {2,4,8,16,28}; //Number of threads used in the benchmark
 
-	for(int i = 0; i < 4; i++){
+	double seq_elapsed_time[5] = {0};
+	double par_elapsed_time[5] = {0};
+
+	int num_runs = 10; //The speed-up measurement is averaged on 10 runs
+
+	for(int i = 0; i < 5; i++){
 
 		for(int j = 0; j < num_runs; j++){
 
@@ -42,7 +46,7 @@ int main(int argc, char **argv){
 			delete seq_hist;
 		}
 		
-		seq_elapsed_time[i] /= num_runs;
+		seq_elapsed_time[i] /= num_runs; //Benchmark of the Contiguous bins with parallel filling
 
 		for(int j = 0; j < num_runs; j++){
 
@@ -55,13 +59,13 @@ int main(int argc, char **argv){
 			delete par_hist;
 		}
 
-		par_elapsed_time[i] /= num_runs;
+		par_elapsed_time[i] /= num_runs; //Benchmark of the Splited bins with parallel filling
 
 	}
 
-	std::cout << "Sequential hist par-filling vs. Parallel hist filling" << std::endl;
+	std::cout << "Contigious hist par-filling vs. Splited hist filling" << std::endl;
 
-	for(int i = 0; i < 4; i++){
+	for(int i = 0; i < 5; i++){
 
 		std::cout << "Speed-up with " << list_num_threads[i];
 		if(list_num_threads[i] < 10){

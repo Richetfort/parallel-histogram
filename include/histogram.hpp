@@ -33,9 +33,11 @@ class SeqHistogram : public Histogram {
 		SeqHistogram(int nbins, double min, double max);
 
 		void print();
-		
 		void fill(double val);
+		void reserveBinsSize(std::size_t n);		
 		void fillHist(std::size_t n, int seed = time(NULL));
+
+		void PAR_reserveBinsSize(std::size_t n, int num_threads = 4);		
 		void PAR_fillHist(std::size_t n, int num_threads = 4, int seed = time(NULL));
 		
 		int counts(int binIndex);

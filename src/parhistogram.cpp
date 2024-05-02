@@ -3,6 +3,7 @@
 
 ParHistogram::ParHistogram(int nbins, double min, double max, int num_threads) : Histogram(nbins,min,max) {
 
+	//Initialization of a more parallel friendly data structure
 	this->num_threads = num_threads;
 	this->list_hist = new SeqHistogram * [num_threads]();
 
@@ -39,13 +40,14 @@ void ParHistogram::fillHist(std::size_t n, int seed){
 
 		size_t size = n/num_threads + (rk < (int)(n%num_threads));
 		for(size_t i = 0; i < size; i++){
-			this->fill(distribution(generator),rk);
+			this->fill(distribution(generator),rk); //threads must have different seeds
 		}	
 	}
 };
 
 int ParHistogram::counts(int idx){
-	
+
+	//This data structure requires to sum the local counts
 	omp_set_num_threads(this->num_threads);	
 
 	int * sizes = new int[this->num_threads];
@@ -55,6 +57,7 @@ int ParHistogram::counts(int idx){
 		sizes[i] = this->list_hist[i]->counts(idx);
 	}
 	int count = 0;
+	//Performance can be improved by replacing the critical section by a reduction operation
 	#pragma omp critical
 	{
 		for(int i = 0; i < this->num_threads; i++){

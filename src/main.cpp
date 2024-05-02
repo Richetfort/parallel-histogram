@@ -6,7 +6,7 @@ int main(int argc, char **argv){
 
 	int num_threads = 4;
 	
-	int nbins = 10, n_random = 100;
+	int nbins = 10, n_random = 100000;
 	double min = -4.0, max = 4.0;
 
 	SeqHistogram * hist = new SeqHistogram(nbins,min,max);
@@ -35,7 +35,7 @@ int main(int argc, char **argv){
 	
 	delete hist_seq_par;
 
-	std::cout << "Seq par-filling elapsed time    = " << seq_par_elapsed_time << "\n" << std::endl;
+	std::cout << "Parallel filling in Contiguous bins elapsed time    = " << seq_par_elapsed_time << "\n" << std::endl;
 
 	std::cout << "-> Speed-up = " << seq_elapsed_time/seq_par_elapsed_time << "\n" << std::endl;
 	
@@ -51,7 +51,7 @@ int main(int argc, char **argv){
 	
 	delete hist_par;
 
-	std::cout << "Parallel filling elapsed time   = " << par_elapsed_time << "\n" << std::endl;
+	std::cout << "Parallel filling in Splited bins elapsed time   = " << par_elapsed_time << "\n" << std::endl;
 
 	std::cout << "-> Speed-up = " << seq_elapsed_time/par_elapsed_time << "\n" << std::endl;
 

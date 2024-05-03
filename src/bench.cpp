@@ -4,9 +4,9 @@
 
 int main(int argc, char **argv){
 
-	//Benchmark of the two data structures implemented : Contiguous bins with parallel filling vs Splited bins with parallel filling
+	//Benchmark of the two data structures implemented : Contiguous bins with parallel filling vs Non-Contigous bins with parallel filling
 	
-	int nbins = 10, n_random = 10000000;
+	int nbins = 10, n_random = 1000000;
 	double min = -4.0, max = 4.0;
 
 	SeqHistogram * seq_hist = (SeqHistogram *)NULL; //
@@ -59,11 +59,11 @@ int main(int argc, char **argv){
 			delete par_hist;
 		}
 
-		par_elapsed_time[i] /= num_runs; //Benchmark of the Splited bins with parallel filling
+		par_elapsed_time[i] /= num_runs; //Benchmark of the Non-Contiguous bins with parallel filling
 
 	}
 
-	std::cout << "Contigious hist par-filling vs. Splited hist filling" << std::endl;
+	std::cout << "Contigious hist par-filling vs. Non-Contiguous hist filling" << std::endl;
 
 	for(int i = 0; i < 5; i++){
 

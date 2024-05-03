@@ -29,6 +29,7 @@ void ParHistogram::fill(double val,int idx){
 
 void ParHistogram::fillHist(std::size_t n, int seed){
 
+	//Parallel filling in a non-contigous data structure
 	omp_set_num_threads(this->num_threads);	
 
 	#pragma omp parallel
@@ -41,13 +42,15 @@ void ParHistogram::fillHist(std::size_t n, int seed){
 		size_t size = n/num_threads + (rk < (int)(n%num_threads));
 		for(size_t i = 0; i < size; i++){
 			this->fill(distribution(generator),rk); //threads must have different seeds
-		}	
+		}
+		//Each thread generates a local histogram	
 	}
+	//No concatenation
 };
 
 int ParHistogram::counts(int idx){
 
-	//This data structure requires to sum the local counts
+	//This data structure however requires to sum the local counts
 	omp_set_num_threads(this->num_threads);	
 
 	int * sizes = new int[this->num_threads];

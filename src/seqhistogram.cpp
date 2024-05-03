@@ -64,7 +64,8 @@ void SeqHistogram::PAR_reserveBinsSize(std::size_t n, int num_threads){
 };
 
 void SeqHistogram::fill(double val){
-
+	//Single value filling
+	//Check underflow and overflow condition, else classify val in the proper bin
 	if(val < this->min){
 		this->underflow_bin.push_back(val);
 	}else if(val >= this->max){
@@ -75,6 +76,8 @@ void SeqHistogram::fill(double val){
 };
 
 void SeqHistogram::fillHist(std::size_t n, int seed){
+
+	//Sequential filling
 
 	std::default_random_engine generator(seed);
 	std::normal_distribution<double> distribution(0.0, 1.0);
@@ -89,6 +92,7 @@ void SeqHistogram::fillHist(std::size_t n, int seed){
 
 void SeqHistogram::PAR_fillHist(std::size_t n, int num_threads, int seed){
 
+	//Parallel filling in contiguous data structure
 	omp_set_num_threads(num_threads);
 
 	this->PAR_reserveBinsSize(n,num_threads); //OMP Bins space reservation
@@ -111,7 +115,7 @@ void SeqHistogram::PAR_fillHist(std::size_t n, int num_threads, int seed){
 
 	//Concatenation of bins : this is the bottleneck
 	//The scheduling must be dynamic to improve the load balance between threads
-	//Static can be used for uniform distribution only, here the costs of data copies are not equals
+	//Static can be used for uniform distribution only, here size of data copies are not equals
 	#pragma omp parallel
 	{
 		#pragma omp for schedule(dynamic)

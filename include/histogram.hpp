@@ -30,6 +30,8 @@ class Histogram {
 class SeqHistogram : public Histogram {
 
 	public :
+
+		//Contigous histogram data structure. Can be filled both sequentially or in parallel
 		SeqHistogram(int nbins, double min, double max);
 
 		void print();
@@ -46,7 +48,7 @@ class SeqHistogram : public Histogram {
 	
 		~SeqHistogram();
 
-		std::vector<double> * bins;
+		std::vector<double> * bins; //Bins represented by contigous std::vector<double>
 		std::vector<double> underflow_bin;
 		std::vector<double> overflow_bin;
 
@@ -55,6 +57,8 @@ class SeqHistogram : public Histogram {
 class ParHistogram : Histogram {
 
 	public : 
+		
+		//Non-contiguous histogram data structure. Filled in parallel
 
 		ParHistogram(int nBins, double min, double max, int num_threads = 4);
 		
@@ -70,6 +74,6 @@ class ParHistogram : Histogram {
 		~ParHistogram();
 
 		int num_threads;
-		SeqHistogram ** list_hist = (SeqHistogram **)NULL;
+		SeqHistogram ** list_hist = (SeqHistogram **)NULL; //Non contigous instance containing the local histograms
 
 };
